@@ -63,4 +63,31 @@ public class LibraryService {
         saveBooks();
         return true;
     }
+
+    public List<String> getBookPages(Book book, int linesPerPage) {
+        if (book == null || book.getTextFilePath() == null) 
+            return List.of("ٍError: not found or book is emty.");
+        return FileManager.readBookPages(book.getTextFilePath(), linesPerPage);
+    }
+
+    public String readFullText(int bookId) {
+        Book book = findBookById(bookId);
+        if (book == null) 
+            return "";
+        return FileManager.readFullText(book.getTextFilePath());
+    }
+
+    public boolean editBookContent(int bookId, String newContent) throws IOException {
+        Book book = findBookById(bookId);
+        if (book == null) 
+            return false;
+        FileManager.writeBookText(book.getTextFilePath(), newContent);
+        return true;
+    }
+
+    public int countLines(Book book) {
+        if (book == null || book.getTextFilePath() == null) 
+            return 0;
+        return FileManager.countLines(book.getTextFilePath());
+    }
 }
