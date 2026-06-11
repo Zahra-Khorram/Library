@@ -82,4 +82,60 @@ public class FileManager {
             System.err.println("Error in saving the book files! " + e.getMessage());
         }
     }
+    public static List<String> readBookPages(String filePath, int linesPerPage) {
+        List<String> pages = new ArrayList<>();
+        List<String> lines = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = reader.readLine();
+            while (line != null) {
+                lines.add(line);
+                line = reader.readLine();
+            }
+            for (int i = 0; i < lines.size(); i += linesPerPage) {
+                StringBuilder newPages = new StringBuilder();
+                for (int j = i; j < i + linesPerPage && j < lines.size(); j++) 
+                    newPages.append(allLines.get(j) + "\n");
+                pages.add(newPages.toString());
+            }
+            if (pages.size() == 0) 
+                pages.add("It is empty.");
+        } catch (FileNotFoundException e) {
+            pages.add("Not found " + filePath + " this file.");
+        } catch (IOException e) {
+            pages.add("Error: " + e.getMessage());
+        }
+        return pages;
+    }
+    
+    public static int countLines(String filePath) {
+        int count = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while (reader.readLine() != null) 
+                count++;
+        } catch (IOException e) {
+            return 0;
+        }
+        return count;
+    }
+
+    public static void writeBookText(String filePath, String content) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(content);
+        }
+    }
+
+    public static String readFullText(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line = reader.readLine();
+            while (line != null) {
+                content.append(line + "\n");
+                line = reader.readLine()
+            }
+        } catch (IOException e) {
+            return "";
+        }
+        return content.toString();
+    }
 }
