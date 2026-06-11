@@ -125,6 +125,23 @@ public class MainFrame extends JFrame {
         add(menuPanel);
         revalidate();
         repaint();
+        //solaleh
+        int lines = service.countLines(selectedBook);
+        JLabel lineCountLabel = new JLabel("Number of line: " + lines);
+        
+        JButton readBookBtn = new JButton("Read Book");
+        readBookBtn.addActionListener(e -> {
+            openBook(false);  
+        });
+        
+        JButton editBookBtn = new JButton("Edit Book");
+        editBookBtn.addActionListener(e -> {
+            openBook(true);   
+        });
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(readBookBtn);
+        buttonPanel.add(editBookBtn);
     }
 
     private void saveMetadata(ActionEvent e) {
@@ -162,4 +179,78 @@ public class MainFrame extends JFrame {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+     private void openBook(boolean editable) {
+        readerPanel.removeAll();
+        readerPanel.setLayout(new BorderLayout());
+
+        pageArea = new JTextArea();
+        pageArea.setLineWrap(true);
+        pageArea.setWrapStyleWord(true);
+        pageArea.setEditable(editable);
+        JScrollPane scrollPane = new JScrollPane(pageArea);
+        readerPanel.add(scrollPane, BorderLayout.CENTER);
+
+        int linesPerPage = 20; 
+        pages = service.getBookPages(selectedBook, linesPerPage);
+        currentPage = 0;
+
+        if (pages != null && !pages.isEmpty()) 
+            pageArea.setText(pages.get(currentPage));
+        else 
+            pageArea.setText("Error get book page.");
+
+        JPanel buttonPanel = new JPanel();
+        JButton prevButton = new JButton("Previous Page");
+        JButton nextButton = new JButton("Next Page");
+        JButton applyButton = new JButton("Apply");
+
+        prevButton.addActionListener(e -> {
+            if (currentPage > 0) {
+                currentPage--;
+                pageArea.setText(pages.get(currentPage));
+            } else 
+                JOptionPane.showMessageDialog(this, "This is first page cant Previous Page");
+        });
+
+        nextButton.addActionListener(e -> {
+            if (currentPage < pages.size() - 1) {
+                currentPage++;
+                pageArea.setText(pages.get(currentPage));
+            } else 
+                JOptionPane.showMessageDialog(this, "This is last page cant Next Page");
+        });
+
+        applyButton.addActionListener(e -> {
+            if (editable) {
+                try {
+                    String newContent = pageArea.getText();
+                    boolean success = service.editBookContent(selectedBook.getId(), newContent);
+                    if (success == true) {
+                        JOptionPane.showMessageDialog(this, "success.");
+                        pages = service.getBookPages(selectedBook, linesPerPage);
+                        currentPage = 0;
+                        if (pages.isEmpty() == false) 
+                            pageArea.setText(pages.get(currentPage));
+                    } else 
+                        JOptionPane.showMessageDialog(this, "Error cant finde.");
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                }
+            }
+        });
+
+        buttonPanel.add(prevButton);
+        buttonPanel.add(nextButton);
+        
+        if (editable == true) 
+            buttonPanel.add(applyButton);
+
+        readerPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        getContentPane().removeAll();
+        getContentPane().add(readerPanel);
+        revalidate();
+        repaint();
+    }    
 }
