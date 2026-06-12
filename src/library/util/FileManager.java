@@ -131,7 +131,7 @@ public class FileManager {
             String line = reader.readLine();
             while (line != null) {
                 content.append(line + "\n");
-                line = reader.readLine()
+                line = reader.readLine();
             }
         } catch (IOException e) {
             return "";
