@@ -7,6 +7,10 @@ import javax.swing.*;
         import java.awt.event.ActionEvent;
 
 public class MainFrame extends JFrame {
+    private JPanel readerPanel;
+    private JTextArea pageArea;
+    private List<String> pages;
+    private int currentPage;
     private LibraryService service;
     private JPanel booksPanel;
     private JPanel menuPanel;
@@ -32,6 +36,7 @@ public class MainFrame extends JFrame {
 
      private void createBooksPanel() {
         booksPanel = new JPanel(new BorderLayout());
+        readerPanel = new JPanel();
 
         JPanel bookButtonsPanel = new JPanel();
         bookButtonsPanel.setLayout(new BoxLayout(bookButtonsPanel, BoxLayout.Y_AXIS));
