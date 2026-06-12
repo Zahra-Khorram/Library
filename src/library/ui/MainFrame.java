@@ -117,7 +117,7 @@ public class MainFrame extends JFrame {
         readBookBtn.setEnabled(true);
         buttonPanel.add(readBookBtn);
 
-        JJButton editBookBtn = new JButton("Edit Book");
+        JButton editBookBtn = new JButton("Edit Book");
         editBookBtn.addActionListener(e -> {
             openBook(true);   
         });
