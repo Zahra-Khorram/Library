@@ -110,13 +110,23 @@ public class MainFrame extends JFrame {
         });
         buttonPanel.add(backBtn);
 
-        JButton readBookBtn = new JButton("ٍReading book");
-        readBookBtn.setEnabled(false);
+        JButton readBookBtn = new JButton("Read Book");
+        readBookBtn.addActionListener(e -> {
+            openBook(false);  
+        });
+        readBookBtn.setEnabled(true);
         buttonPanel.add(readBookBtn);
 
-        JButton editBookBtn = new JButton("Edit");
-        editBookBtn.setEnabled(false);
+        JJButton editBookBtn = new JButton("Edit Book");
+        editBookBtn.addActionListener(e -> {
+            openBook(true);   
+        });
+        editBookBtn.setEnabled(true);
         buttonPanel.add(editBookBtn);
+
+        int lines = service.countLines(selectedBook);
+        JLabel lineCountLabel = new JLabel("Number of line: " + lines);
+        buttonPanel.add(lineCountLabel);
 
         menuPanel.add(infoPanel, BorderLayout.CENTER);
         menuPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -125,23 +135,6 @@ public class MainFrame extends JFrame {
         add(menuPanel);
         revalidate();
         repaint();
-        //solaleh
-        int lines = service.countLines(selectedBook);
-        JLabel lineCountLabel = new JLabel("Number of line: " + lines);
-        
-        JButton readBookBtn = new JButton("Read Book");
-        readBookBtn.addActionListener(e -> {
-            openBook(false);  
-        });
-        
-        JButton editBookBtn = new JButton("Edit Book");
-        editBookBtn.addActionListener(e -> {
-            openBook(true);   
-        });
-        
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.add(readBookBtn);
-        buttonPanel.add(editBookBtn);
     }
 
     private void saveMetadata(ActionEvent e) {
