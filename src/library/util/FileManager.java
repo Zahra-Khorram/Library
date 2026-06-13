@@ -95,7 +95,7 @@ public class FileManager {
             for (int i = 0; i < lines.size(); i += linesPerPage) {
                 StringBuilder newPages = new StringBuilder();
                 for (int j = i; j < i + linesPerPage && j < lines.size(); j++) 
-                    newPages.append(allLines.get(j) + "\n");
+                    newPages.append(lines.get(j) + "\n");
                 pages.add(newPages.toString());
             }
             if (pages.size() == 0) 
