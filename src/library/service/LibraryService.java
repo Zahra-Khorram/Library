@@ -24,10 +24,11 @@ public class LibraryService {
         return new ArrayList<>(books);
     }
 
-    public Optional<Book> findBookById(int id) {
-        return books.stream()
-                .filter(book -> book.getId() == id)
-                .findFirst();
+    public Book findBookById(int id) {
+        for (Book book: books)
+            if (book.getId() == id)
+                return book;
+        return null;
     }
 
     public void saveBooks() {
@@ -36,13 +37,10 @@ public class LibraryService {
 
     public boolean editBookMetadata(int bookId, String newTitle, String newAuthor,
                                     String newPublisher, Integer newYear) {
-        Optional<Book> bookOpt = findBookById(bookId);
+        Book book = findBookById(bookId);
 
-        if (bookOpt.isEmpty()) {
+        if (book == null)
             return false;
-        }
-
-        Book book = bookOpt.get();
 
         if (newTitle != null && !newTitle.trim().isEmpty()) {
             book.setTitle(newTitle.trim());
