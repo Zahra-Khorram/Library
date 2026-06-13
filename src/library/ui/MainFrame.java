@@ -3,10 +3,13 @@ package library.ui;
 import library.model.Book;
 import library.service.LibraryService;
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.List;
 
 public class MainFrame extends JFrame {
+    private String s;
     private JPanel readerPanel;
     private JTextArea pageArea;
     private List<String> pages;
@@ -163,7 +166,7 @@ public class MainFrame extends JFrame {
                         "Successful",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                selectedBook = service.findBookById(selectedBook.getId()).orElse(null);
+                selectedBook = service.findBookById(selectedBook.getId());
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Av Error occourred in saving book info!",
@@ -201,6 +204,7 @@ public class MainFrame extends JFrame {
         JPanel buttonPanel = new JPanel();
         JButton prevButton = new JButton("Previous Page");
         JButton nextButton = new JButton("Next Page");
+         JButton backButton = new JButton("Back");
         JButton applyButton = new JButton("Apply");
 
         prevButton.addActionListener(e -> {
@@ -210,6 +214,11 @@ public class MainFrame extends JFrame {
             } else 
                 JOptionPane.showMessageDialog(this, "This is first page cant Previous Page");
         });
+
+         backButton.addActionListener(e -> {
+             remove(readerPanel);
+             showBookMenu();
+         });
 
         nextButton.addActionListener(e -> {
             if (currentPage < pages.size() - 1) {
@@ -240,6 +249,7 @@ public class MainFrame extends JFrame {
 
         buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
+        buttonPanel.add(backButton);
         
         if (editable == true) 
             buttonPanel.add(applyButton);
